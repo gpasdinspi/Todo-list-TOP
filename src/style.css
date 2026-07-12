@@ -1,0 +1,122 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.icons{
+    width: 20px;
+    height: auto;
+
+}
+body, html{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.left{
+    background-color: gray;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10%;
+    padding-left: 5px;
+}
+
+.right{
+    padding: 16px;
+    width: 85%;
+}
+
+.options{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.options:hover, li:hover{
+    color: rgb(41, 40, 40);
+    cursor: pointer;
+
+}
+
+#options{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.view{
+    position: relative;
+    left: 95%;
+    width: 100%;
+}
+
+.right > header{
+    width: 100%;
+}
+
+.project{
+    background-color: rgb(207, 207, 207);
+    border: 2px solid green;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content{
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 16px;
+}
+
+.round-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.todo{
+    display: flex;
+    gap: 5px;
+}
+
+.tasks-left li {
+    list-style: none;
+    position: relative;
+    padding-left: 24px;
+}
+
+.tasks-left li::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background-image: url('./img/questionnaire.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.content-todo{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.project:hover{
+    background-color: rgba(207, 207, 207, 0.616);
+}
