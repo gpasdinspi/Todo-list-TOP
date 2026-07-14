@@ -76,8 +76,28 @@
 
     <div class="right">
         
-        
     </div>
+
+    <dialog id="addProject-dialog">
+        <form method="dialog" class="form">
+            <p>New Project</p>
+            <p>Title : <input type="text" name="title" id="project-title"></p>
+            <p>description : <input type="text" name="description" id="project-description"></p>
+            <p>priority : 
+            <select name="priority" id="project-priority">
+                <option value="high">high</option>
+                <option value="medium">medium</option>
+                <option value="low">low</option>
+            </select>
+            </p>
+            <p>notes : <input type="text" id="project-note" name="notes"></p>
+
+            <div class="dialog-actions">
+            <button type="submit" class="submit-project" value="submit">submit</button>
+            <button type="submit" class="cancel-project" value="cancel">cancel</button>
+            </div>
+        </form>
+    </dialog>
     
 </body>
 

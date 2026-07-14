@@ -1,24 +1,26 @@
 import "./style.css";
 import filterIcon from "./img/filter.png";
+import addproject from "./img/plus.png";
 import { Project } from "./project";
 import { Todo } from "./Todo"
 
 function displayInbox(){
-    let main = new Project("main", "default project", "low", "notes");
 
-    let task1 = new Todo("create your first task", "description", "duedate", "low", "note");
-    let task2 = new Todo("create a new project", "description", "duedate", "low", "note");
-    let task3 = new Todo("use the search option", "description", "duedate", "low", "note");
-    let task4 = new Todo("complete your first task", "description", "duedate", "low", "note");
+    if (!localStorage.getItem("projects")){
+        let task1 = new Todo("create your first task", "description", "duedate", "low", "note");
+        let task2 = new Todo("create a new project", "description", "duedate", "low", "note");
+        let task3 = new Todo("use the search option", "description", "duedate", "low", "note");
+        let task4 = new Todo("complete your first task", "description", "duedate", "low", "note");
 
-    let main_task = [task1, task2, task3, task4];
+        let main_task = [task1, task2, task3, task4];
 
-    localStorage.setItem("main", JSON.stringify(main_task))
+        let main = new Project("main", "default project", "low", "notes", main_task);
 
-    let projects = []
-    projects.push(main);
+        let projects = []
+        projects.push(main);
 
-    localStorage.setItem("projects", JSON.stringify(projects));
+        localStorage.setItem("projects", JSON.stringify(projects));
+    }
 
     let right = document.querySelector(".right");
     right.innerHTML = ""; // clear the div
@@ -33,19 +35,17 @@ function displayInbox(){
         
         </div>`
 
-    const _projects = JSON.parse(localStorage.getItem("projects"));
+    displayProject();
+
+    right.querySelector(".content").innerHTML +=
+    `<button command="show-modal" commandfor="addProject-dialog" class="addProject-btn">
+    <div class="add-project">
+        <h3>new Project</h3>
+        <p><img src="${addproject}" alt="add" class="bigger-icon"></p>
+    </div>
+    </button>
+    `
     
-    right.querySelector(".content").innerHTML = _projects.map(project => (`
-        <div class="project ${project.title}">
-            <h3>${project.title}</h3>
-            <p>${project.description}</p>
-            <select name="priority" id="priority">
-                <option value="high">high</option>
-                <option value="medium">medium</option>
-                <option value="low">low</option>
-            </select>
-            <p>${project.notes}</p>
-        </div>`)).join("")
 
     const allProjects = document.querySelectorAll(".project");
 
@@ -59,17 +59,20 @@ function displayInbox(){
 }
 
 function displayProject(){
-    let projects = document.querySelector(".projects");
+    let projects = document.querySelector(".content");
 
     const _projects = JSON.parse(localStorage.getItem("projects"));
     projects.innerHTML = _projects.map(project => `
-
-        ` ).join("")
+        <div class="project ${project.title}">
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <p>${project.notes}</p>
+        </div>`).join("")
 
 }
 
 function displayTodo(project){
-    const _project = JSON.parse(localStorage.getItem(project));
+    const _project = findProject(project, JSON.parse(localStorage.getItem("projects"))).todos;
     const container = document.querySelector(".right");
 
     container.innerHTML = `<h1>${project}</h1>
@@ -87,9 +90,18 @@ function displayTodo(project){
 
 }
 
-function addTask(todos, task){
+function findProject(title, projects){
+    for (const project of projects) {
+        if (project.title === title){
+            return project
+        }
+    }
+}
 
-    todos.push();
+function addTask(project_name, task){
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    findProject(project_name, projects).todos.push(task);
+    localStorage.setItem("projects", JSON.stringify(projects));
 }
 
 

@@ -1,3 +1,12 @@
+:root{
+    --bg: #FAF3EA;       
+    --sidebar: #C88374;  
+    --accent: #B5533C;   
+    --text-dark: #2E2A26; 
+    --text-light: #6B645C;
+    --border: #D8CDBF;   
+}
+
 *{
     margin: 0px;
     padding: 0px;
@@ -7,8 +16,13 @@
 .icons{
     width: 20px;
     height: auto;
-
 }
+
+.bigger-icon{
+    width: 40px;
+    height: auto;
+}
+
 body, html{
     width: 100%;
     height: 100%;
@@ -17,16 +31,17 @@ body, html{
 }
 
 .left{
-    background-color: gray;
+    background-color: var(--sidebar);
     width: 15%;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10%;
-    padding-left: 5px;
+    padding-left: 8px;
 }
 
 .right{
+    background-color: var(--bg);
     padding: 16px;
     width: 85%;
 }
@@ -65,13 +80,26 @@ body, html{
     width: 100%;
 }
 
-.project{
-    background-color: rgb(207, 207, 207);
-    border: 2px solid green;
+.project, .add-project{
+    background-color: #efcbc3;
+    border: 3px solid;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 5px;
+}
+
+.add-project{
+    height: 100%;
+    border-radius: inherit;
+    border: 1px solid black;
+}
+
+.addProject-btn{
+    border-radius: 5px;
+    border: 2px solid black;
 }
 
 .content{
@@ -117,6 +145,77 @@ body, html{
     gap: 8px;
 }
 
-.project:hover{
-    background-color: rgba(207, 207, 207, 0.616);
+.project:hover, .add-project:hover, .addProject-btn:hover{
+    background-color: #eda99a;
+}
+
+.header{
+    margin-top: 8px;
+}
+
+select{
+    padding:2px;
+}
+
+dialog {
+  display: none;
+  border: none;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+dialog input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.addProject-dialog{
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cancel-project,
+.submit-project {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-project {
+  background: #2563eb;
+  color: white;
+}
+
+.cancel-project {
+  background: #e5e7eb;
+  color: #111;
 }
