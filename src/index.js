@@ -1,21 +1,47 @@
 import "./style.css";
 import {Project} from "./project";
 import {Todo} from "./Todo";
-import { addTask, displayInbox, displayTodo } from "./display";
+import { addTask, displayInbox, displayTodo, addProjectOption } from "./display";
 
 function main(){
+    // displays the project when we load the website
     document.addEventListener("DOMContentLoaded", () => displayInbox());
     
-    document.querySelector(".task").addEventListener("click", ()=> addTask());
+    // handle the dialoge for adding tasks
+    const openBtn = document.querySelector('.task');
+    const dialogTask = document.getElementById('addtask-dialog');
+    openBtn.addEventListener('click', () => {
+    addProjectOption();
+    dialogTask.showModal();
+    });
+    dialogTask.addEventListener('close', () => {
+    if (dialogTask.returnValue === 'submit') {
+        const form = dialogTask.querySelector('form');
+        const data = new FormData(form);
 
-    document.querySelector(".main").addEventListener("click", () => displayTodo("main"));
-    
+        let project = data.get('project');
+        
+        const newProject = new Todo(
+        data.get('title'),
+        data.get('description'),
+        data.get('dueDate'),
+        data.get('priority'),
+        data.get('notes')
+        );
+
+        addTask(project, newProject);
+        displayTodo(project);
+        dialogTask.querySelector('form').reset();        
+    }
+    });
+
     document.querySelector(".inbox").addEventListener("click", ()=> displayInbox());
     
-    let dialog = document.getElementById('addProject-dialog');
-    dialog.addEventListener('close', () => {
-    if (dialog.returnValue === 'submit') {
-        const form = dialog.querySelector('form');
+    // handle the dialoge for adding Projects
+    let dialogProject = document.getElementById('addProject-dialog');
+    dialogProject.addEventListener('close', () => {
+    if (dialogProject.returnValue === 'submit') {
+        const form = dialogProject.querySelector('form');
         const data = new FormData(form);
         
         const newProject = new Project(
@@ -29,10 +55,9 @@ function main(){
         projects.push(newProject);
         localStorage.setItem("projects", JSON.stringify(projects));
 
-        dialog.querySelector('form').reset();
+        dialogProject.querySelector('form').reset();
         
         displayInbox()
-
     }
     });
 

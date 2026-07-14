@@ -74,6 +74,8 @@ body, html{
     position: relative;
     left: 95%;
     width: 100%;
+    display: flex;
+    gap: 5px;
 }
 
 .right > header{
@@ -203,19 +205,21 @@ dialog input {
 }
 
 .cancel-project,
-.submit-project {
+.submit-project, 
+.submit-task, 
+.cancel-task {
   padding: 8px 16px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
 }
 
-.submit-project {
+.submit-project, .submit-task {
   background: #2563eb;
   color: white;
 }
 
-.cancel-project {
+.cancel-project, .cancel-task {
   background: #e5e7eb;
   color: #111;
 }

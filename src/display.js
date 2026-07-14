@@ -7,6 +7,7 @@ import { Todo } from "./Todo"
 function displayInbox(){
 
     if (!localStorage.getItem("projects")){
+        // fix the date
         let task1 = new Todo("create your first task", "description", "duedate", "low", "note");
         let task2 = new Todo("create a new project", "description", "duedate", "low", "note");
         let task3 = new Todo("use the search option", "description", "duedate", "low", "note");
@@ -104,5 +105,23 @@ function addTask(project_name, task){
     localStorage.setItem("projects", JSON.stringify(projects));
 }
 
+function addProjectOption(){
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    let array = []
+    for (const project of projects) {
+        array.push(project.title);
+    }
 
-export {addTask, displayInbox, displayTodo};
+    let addTaskDialog = document.querySelector(".add-task");
+    let html = `<select name="project" id="project-priority">`;
+    for (const element of array) {
+        html += `<option value="${element}">${element}</option>`;
+    }
+    html += `</select>`;
+
+    addTaskDialog.innerHTML = html;
+
+}
+
+
+export {addTask, displayInbox, displayTodo, addProjectOption};

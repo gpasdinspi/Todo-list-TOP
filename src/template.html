@@ -98,6 +98,31 @@
             </div>
         </form>
     </dialog>
+
+    <dialog id="addtask-dialog">
+        <form method="dialog" class="form">
+            <p>Add task</p>
+            <p>Title : <input type="text" name="title" id="project-title"></p>
+            <p>description : <input type="text" name="description" id="project-description"></p>
+            <p>Due date : <input type="date" name="dueDate"></p>
+            <p>priority : 
+            <select name="priority" id="project-priority">
+                <option value="high">high</option>
+                <option value="medium">medium</option>
+                <option value="low">low</option>
+            </select>
+            </p>
+            <div class="add-task">
+
+            </div>
+            <p>notes : <input type="text" id="project-note" name="notes"></p>
+
+            <div class="dialog-actions">
+            <button type="submit" class="submit-task" value="submit">submit</button>
+            <button type="submit" class="cancel-task" value="cancel">cancel</button>
+            </div>
+        </form>
+    </dialog>
     
 </body>
 
