@@ -120,6 +120,7 @@ body, html{
 .todo{
     display: flex;
     gap: 5px;
+    padding-bottom: 16px;
 }
 
 .tasks-left li {
@@ -222,4 +223,12 @@ dialog input {
 .cancel-project, .cancel-task {
   background: #e5e7eb;
   color: #111;
+}
+
+hr {
+    border: none;           /* enlève le style 3D par défaut */
+    height: 1px;            /* épaisseur de la ligne */
+    background-color: #ccb8ae;  /* couleur douce, à ajuster selon ta palette terracotta/cream */
+    opacity: 0.6;           /* pour l'adoucir encore plus si besoin */
+    margin: 1rem 0;         /* espacement au-dessus/en dessous */
 }

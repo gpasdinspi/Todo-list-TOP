@@ -1,17 +1,19 @@
 import "./style.css";
 import filterIcon from "./img/filter.png";
 import addproject from "./img/plus.png";
+import addtask from "./img/plus.png";
 import { Project } from "./project";
 import { Todo } from "./Todo"
+import { format, startOfToday } from "date-fns";
 
 function displayInbox(){
 
     if (!localStorage.getItem("projects")){
         // fix the date
-        let task1 = new Todo("create your first task", "description", "duedate", "low", "note");
-        let task2 = new Todo("create a new project", "description", "duedate", "low", "note");
-        let task3 = new Todo("use the search option", "description", "duedate", "low", "note");
-        let task4 = new Todo("complete your first task", "description", "duedate", "low", "note");
+        let task1 = new Todo("create your first task", "description", "2026-09-23", "low", "note");
+        let task2 = new Todo("create a new project", "description", "2026-02-13", "low", "note");
+        let task3 = new Todo("use the search option", "description", "2021-03-14", "low", "note");
+        let task4 = new Todo("complete your first task", "description", "2027-09-23", "low", "note");
 
         let main_task = [task1, task2, task3, task4];
 
@@ -82,13 +84,68 @@ function displayTodo(project){
 
         </div>`
 
-    container.querySelector(".content-todo").innerHTML = _project.map(toDos => `
-        <div class="todo">
-                <input type="checkbox" class="round-checkbox">
-                <p>${toDos.title}</p>
-            </div>
-        `).join("")
+    let sortedTodos =[];
+    _project.forEach(toDos => {
+        let inserted = false;
+        for (let i = 0; i < sortedTodos.length; i++) {
+            if (toDos.dueDate < sortedTodos[i].dueDate) {
+                sortedTodos.splice(i, 0, toDos);
+                inserted = true;
+                break;
+            }
+        }
+        if (!inserted) {
+            sortedTodos.push(toDos);
+        }
+    });
 
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+    let html = ""
+    sortedTodos.forEach(toDo =>{
+        if (toDo.dueDate !== currentDate){
+            currentDate = toDo.dueDate;
+            html += `<h3>${currentDate}</h3>
+            `
+        }
+        html+= `
+        <hr class="lighter_hr">
+        <div class="todo">
+            <input type="checkbox" class="round-checkbox">
+            <p>${toDo.title}</p>
+        </div>
+        `
+    })
+    container.querySelector(".content-todo").innerHTML = html;
+
+    container.querySelector(".content-todo").innerHTML +=`
+    <hr class="lighter_hr">
+    <div class="options task">
+        <img src=${addtask} alt="add" class="icons">
+        <p>
+            new task
+        </p>
+    </div>
+    `
+    addTaskEvent();
+
+}
+
+function addTaskEvent(){
+    const openBtn = document.querySelector('.content-todo .task');
+    if (!openBtn) return;
+    const dialogTask = document.getElementById('addtask-dialog');
+
+    openBtn.addEventListener('click', () => {
+        addProjectOption();
+        dialogTask.showModal();
+    });
 }
 
 function findProject(title, projects){
@@ -124,4 +181,4 @@ function addProjectOption(){
 }
 
 
-export {addTask, displayInbox, displayTodo, addProjectOption};
+export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent};

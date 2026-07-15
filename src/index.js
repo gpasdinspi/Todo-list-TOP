@@ -2,6 +2,17 @@ import "./style.css";
 import {Project} from "./project";
 import {Todo} from "./Todo";
 import { addTask, displayInbox, displayTodo, addProjectOption } from "./display";
+import { compareAsc, format } from "date-fns";
+
+format(new Date(2014, 1, 11), "yyyy-MM-dd");
+//=> '2014-02-11'
+
+const dates = [
+  new Date(1995, 6, 2),
+  new Date(1987, 1, 11),
+  new Date(1989, 6, 10),
+];
+dates.sort(compareAsc);
 
 function main(){
     // displays the project when we load the website
@@ -14,13 +25,13 @@ function main(){
     addProjectOption();
     dialogTask.showModal();
     });
+    
     dialogTask.addEventListener('close', () => {
     if (dialogTask.returnValue === 'submit') {
         const form = dialogTask.querySelector('form');
         const data = new FormData(form);
 
-        let project = data.get('project');
-        
+        let project = data.get('project');        
         const newProject = new Todo(
         data.get('title'),
         data.get('description'),
