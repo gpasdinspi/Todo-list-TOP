@@ -46,13 +46,6 @@
                 </p>
             </div>
 
-            <div class="options filter">
-                <img src="./img/filter.png" alt="filter" class="icons">
-                <p>
-                    filter
-                </p>
-            </div>
-
         </div>
 
         <div class="projects">
@@ -119,6 +112,18 @@
 
             <div class="dialog-actions">
             <button type="submit" class="submit-task" value="submit">submit</button>
+            <button type="submit" class="cancel-task" value="cancel">cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="search-dialog">
+        <form method="dialog" class="form">
+            <p>Search a task</p>
+            <p>keyword : <input type="text" id="keyword" name="keyword"></p>
+
+            <div class="dialog-actions">
+            <button type="submit" class="submit-task" value="submit">search</button>
             <button type="submit" class="cancel-task" value="cancel">cancel</button>
             </div>
         </form>

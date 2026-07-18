@@ -117,8 +117,9 @@ function displayTodo(project){
         html+= `
         <hr class="lighter_hr">
         <div class="todo">
-            <input type="checkbox" class="round-checkbox">
-            <p>${toDo.title}</p>
+            <p><input type="checkbox" class="round-checkbox"> ${toDo.title}</p>
+            <p class="little">${toDo.description}</p>
+            <p class="little">${toDo.notes}</p>
         </div>
         `
     })
@@ -177,8 +178,44 @@ function addProjectOption(){
     html += `</select>`;
 
     addTaskDialog.innerHTML = html;
+}
+
+function displayUpcomming(){
+
+}
+
+function displaySearch(query){
+    const projects = JSON.parse(localStorage.getItem("projects"));
+    const results = [];
+
+    projects.forEach(project => {
+        project.todos.forEach(todo => {
+            if (todo.title.toLowerCase().includes(query.toLowerCase())) {
+                results.push({ ...todo, projectName: project.title });
+            }
+        });
+    });
+
+   const container = document.querySelector(".right");
+    container.innerHTML = `<h1>Résultats pour "${query}"</h1><div class="content-todo"></div>`;
+
+    let html = "";
+    results.forEach(todo => {
+        html += `
+        <hr class="lighter_hr">
+        <div class="todo">
+            <p><input type="checkbox" class="round-checkbox"> ${todo.title}</p>
+            <p class="little">${todo.projectName}</p>
+            <p class="little">${todo.description}</p>
+        </div>`;
+    });
+    container.querySelector(".content-todo").innerHTML = html || "<p>No result found</p>";
+
+}
+
+function displayFilter(){
 
 }
 
 
-export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent};
+export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent, displaySearch, displayUpcomming, displayFilter};

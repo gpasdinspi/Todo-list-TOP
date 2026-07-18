@@ -119,6 +119,7 @@ body, html{
 
 .todo{
     display: flex;
+    flex-direction: column;
     gap: 5px;
     padding-bottom: 16px;
 }
@@ -226,9 +227,16 @@ dialog input {
 }
 
 hr {
-    border: none;           /* enlève le style 3D par défaut */
-    height: 1px;            /* épaisseur de la ligne */
-    background-color: #ccb8ae;  /* couleur douce, à ajuster selon ta palette terracotta/cream */
-    opacity: 0.6;           /* pour l'adoucir encore plus si besoin */
-    margin: 1rem 0;         /* espacement au-dessus/en dessous */
+    border: none;           
+    height: 1px;            
+    background-color: #ccb8ae;  
+    opacity: 0.6;           
+    margin: 1rem 0;
+}
+
+.little{
+    color: var(--text-light);
+    position: relative;
+    left: 24px;
+    line-height: 1.2rem;
 }

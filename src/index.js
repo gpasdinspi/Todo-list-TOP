@@ -1,18 +1,8 @@
 import "./style.css";
 import {Project} from "./project";
 import {Todo} from "./Todo";
-import { addTask, displayInbox, displayTodo, addProjectOption } from "./display";
+import { addTask, displayInbox, displayTodo, addProjectOption, displaySearch, displayUpcomming, displayFilter } from "./display";
 import { compareAsc, format } from "date-fns";
-
-format(new Date(2014, 1, 11), "yyyy-MM-dd");
-//=> '2014-02-11'
-
-const dates = [
-  new Date(1995, 6, 2),
-  new Date(1987, 1, 11),
-  new Date(1989, 6, 10),
-];
-dates.sort(compareAsc);
 
 function main(){
     // displays the project when we load the website
@@ -21,57 +11,58 @@ function main(){
     // handle the dialoge for adding tasks
     const openBtn = document.querySelector('.task');
     const dialogTask = document.getElementById('addtask-dialog');
+    // fill the select option
     openBtn.addEventListener('click', () => {
     addProjectOption();
     dialogTask.showModal();
     });
-    
-    dialogTask.addEventListener('close', () => {
-    if (dialogTask.returnValue === 'submit') {
-        const form = dialogTask.querySelector('form');
-        const data = new FormData(form);
-
-        let project = data.get('project');        
-        const newProject = new Todo(
-        data.get('title'),
-        data.get('description'),
-        data.get('dueDate'),
-        data.get('priority'),
-        data.get('notes')
-        );
-
-        addTask(project, newProject);
-        displayTodo(project);
-        dialogTask.querySelector('form').reset();        
-    }
+    // setup the dialog
+    setupDialog(dialogTask, (data) => {
+    const project = data.get('project');
+    const newTask = new Todo(
+        data.get('title'), data.get('description'),
+        data.get('dueDate'), data.get('priority'), data.get('notes')
+    );
+    addTask(project, newTask);
+    displayTodo(project);
     });
 
     document.querySelector(".inbox").addEventListener("click", ()=> displayInbox());
-    
     // handle the dialoge for adding Projects
     let dialogProject = document.getElementById('addProject-dialog');
-    dialogProject.addEventListener('close', () => {
-    if (dialogProject.returnValue === 'submit') {
-        const form = dialogProject.querySelector('form');
-        const data = new FormData(form);
-        
-        const newProject = new Project(
-        data.get('title'),
-        data.get('description'),
-        data.get('priority'),
-        data.get('notes')
-        );
-
-        let projects = JSON.parse(localStorage.getItem("projects")) || [];
-        projects.push(newProject);
-        localStorage.setItem("projects", JSON.stringify(projects));
-
-        dialogProject.querySelector('form').reset();
-        
-        displayInbox()
-    }
+    setupDialog(dialogProject, (data) => {
+    const newProject = new Project(
+        data.get('title'), data.get('description'),
+        data.get('priority'), data.get('notes')
+    );
+    let projects = JSON.parse(localStorage.getItem("projects")) || [];
+    projects.push(newProject);
+    localStorage.setItem("projects", JSON.stringify(projects));
+    displayInbox();
     });
 
+    // handle the search option
+    let searchDialog = document.getElementById('search-dialog');
+    document.querySelector(".search").addEventListener("click", () => searchDialog.showModal());
+    setupDialog(searchDialog, (data) => {
+        const query = data.get('keyword');
+        displaySearch(query);
+    });
+
+    // handle the upcomming option
+    document.querySelector(".upcomming").addEventListener("click", () => displayUpcomming());
+
+}
+
+function setupDialog(dialog, onSubmit) {
+  dialog.addEventListener('close', () => {
+    if (dialog.returnValue === 'submit') {
+      const form = dialog.querySelector('form');
+      const data = new FormData(form);
+      onSubmit(data);
+      form.reset();
+    }
+  });
 }
 
 main()
