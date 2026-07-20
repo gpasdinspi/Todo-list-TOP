@@ -1,7 +1,7 @@
 import "./style.css";
 import {Project} from "./project";
 import {Todo} from "./Todo";
-import { addTask, displayInbox, displayTodo, addProjectOption, displaySearch, displayUpcomming, displayFilter } from "./display";
+import { addTask, displayInbox, displayTodo, addProjectOption, displaySearch, displayUpcomming, displayFilter, completeFilter, setupDialog } from "./display";
 import { compareAsc, format } from "date-fns";
 
 function main(){
@@ -52,17 +52,6 @@ function main(){
     // handle the upcomming option
     document.querySelector(".upcomming").addEventListener("click", () => displayUpcomming());
 
-}
-
-function setupDialog(dialog, onSubmit) {
-  dialog.addEventListener('close', () => {
-    if (dialog.returnValue === 'submit') {
-      const form = dialog.querySelector('form');
-      const data = new FormData(form);
-      onSubmit(data);
-      form.reset();
-    }
-  });
 }
 
 main()

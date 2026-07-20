@@ -5,6 +5,7 @@ import addtask from "./img/plus.png";
 import { Project } from "./project";
 import { Todo } from "./Todo"
 import { format, startOfToday } from "date-fns";
+import { ht } from "date-fns/locale";
 
 function displayInbox(){
 
@@ -39,6 +40,17 @@ function displayInbox(){
         </div>`
 
     displayProject();
+    
+    // handle the filter option
+    let filterDialog = document.getElementById('filter-dialog');
+    
+    document.querySelector(".view").addEventListener("click", () => {completeFilter();
+    filterDialog.showModal();} );
+    setupDialog(filterDialog, (data) => {
+        const priority = data.get('priority');
+        const projectName = data.get('projectName');
+        displayFilter(priority, projectName);
+    });
 
     right.querySelector(".content").innerHTML +=
     `<button command="show-modal" commandfor="addProject-dialog" class="addProject-btn">
@@ -49,7 +61,6 @@ function displayInbox(){
     </button>
     `
     
-
     const allProjects = document.querySelectorAll(".project");
 
     allProjects.forEach(function(projectElement) {
@@ -181,7 +192,35 @@ function addProjectOption(){
 }
 
 function displayUpcomming(){
+    let today = format(new Date(), "yyyy-MM-dd");
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    let tasks = [];
 
+    projects.forEach(project =>
+        project.todos.forEach(todo =>{
+            if (todo.dueDate >= today){
+                tasks.push({ ...todo, projectName: project.title });
+            }
+        }
+        )
+    )
+
+    tasks.sort();
+
+    const container = document.querySelector(".right");
+    container.innerHTML = `<h1>Upcomming tasks</h1><div class="content-todo"></div>`;
+
+    let html = "";
+    tasks.forEach(todo => {
+        html += `
+        <hr class="lighter_hr">
+        <div class="todo">
+            <p><input type="checkbox" class="round-checkbox"> ${todo.title}</p>
+            <p class="little">${todo.projectName}</p>
+            <p class="little">${todo.description}</p>
+        </div>`;
+    });
+    container.querySelector(".content-todo").innerHTML = html || "<p>No upcomming tasks</p>";
 }
 
 function displaySearch(query){
@@ -213,9 +252,66 @@ function displaySearch(query){
 
 }
 
-function displayFilter(){
+function displayFilter(priority = "all", projectName = "all"){
+    const projects = JSON.parse(localStorage.getItem("projects"));
+    let tasks = [];
+
+    projects.forEach(project => {
+        if (projectName !== "all" && project.title !== projectName) return;
+        project.todos.forEach(todo => {
+            if (priority !== "all" && todo.priority !== priority) return;
+            tasks.push({ ...todo, projectName: project.title });
+        });
+    });
+
+    tasks.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+
+    const container = document.querySelector(".right");
+    container.innerHTML = `<h1>Filtered tasks</h1><div class="content-todo"></div>`;
+
+    let html = "";
+    tasks.forEach(todo => {
+        html += `
+        <hr class="lighter_hr">
+        <div class="todo">
+            <p><input type="checkbox" class="round-checkbox"> ${todo.title}</p>
+            <p class="little">${todo.projectName} — ${todo.priority}</p>
+            <p class="little">${todo.description}</p>
+        </div>`;
+    });
+    container.querySelector(".content-todo").innerHTML = html || "<p>No matching tasks</p>";
+}
+
+function completeFilter(){
+    let dialog = document.querySelector(".filter-option");
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    let array = []
+
+    for (const project of projects) {
+        array.push(project.title);
+    }
+
+    let html = `<select name="projectName" id="project-priority">`;
+    html += `<option value="all">all</option>`
+    for (const element of array) {
+        html += `<option value="${element}">${element}</option>`;
+    }
+    html += `</select>`;
+
+    dialog.innerHTML = html;
 
 }
 
+function setupDialog(dialog, onSubmit) {
+  dialog.addEventListener('close', () => {
+    if (dialog.returnValue === 'submit') {
+      const form = dialog.querySelector('form');
+      const data = new FormData(form);
+      onSubmit(data);
+      form.reset();
+    }
+  });
+}
 
-export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent, displaySearch, displayUpcomming, displayFilter};
+
+export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent, displaySearch, displayUpcomming, displayFilter, completeFilter, setupDialog};
