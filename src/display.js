@@ -277,7 +277,7 @@ function displaySearch(query){
     if (e.target.classList.contains("round-checkbox") && e.target.checked) {
         const { id, project } = e.target.dataset;
         completeTask(project, id);
-        e.target.closest(".todo").remove(); 
+        e.target.closest(".todo").remove();
     }
     });
 
@@ -319,7 +319,8 @@ function displayFilter(priority = "all", projectName = "all"){
     if (e.target.classList.contains("round-checkbox") && e.target.checked) {
         const { id, project } = e.target.dataset;
         completeTask(project, id);
-        e.target.closest(".todo").remove(); 
+        e.target.closest(".todo").remove();
+    }
     });
 
 }
