@@ -120,6 +120,7 @@ function displayTodo(project){
     let currentDate = `${day}-${month}-${year}`;
     let html = ""
     sortedTodos.forEach(toDo =>{
+        if (toDo.checklist) return;
         if (toDo.dueDate !== currentDate){
             currentDate = toDo.dueDate;
             html += `<h3>${currentDate}</h3>
@@ -128,7 +129,7 @@ function displayTodo(project){
         html+= `
         <hr class="lighter_hr">
         <div class="todo">
-            <p><input type="checkbox" class="round-checkbox"> ${toDo.title}</p>
+            <p><input type="checkbox" class="round-checkbox" data-id="${toDo.id}" data-project="${project}"> ${toDo.title}</p>
             <p class="little">${toDo.description}</p>
             <p class="little">${toDo.notes}</p>
         </div>
@@ -146,6 +147,15 @@ function displayTodo(project){
     </div>
     `
     addTaskEvent();
+
+    // handle the checkbox removal
+    container.querySelector(".content-todo").addEventListener("change", (e) => {
+    if (e.target.classList.contains("round-checkbox") && e.target.checked) {
+        const { id, project } = e.target.dataset;
+        completeTask(project, id);
+        e.target.closest(".todo").remove(); 
+    }
+    });
 
 }
 
@@ -198,6 +208,7 @@ function displayUpcomming(){
 
     projects.forEach(project =>
         project.todos.forEach(todo =>{
+            if (toDo.checklist) return;
             if (todo.dueDate >= today){
                 tasks.push({ ...todo, projectName: project.title });
             }
@@ -221,6 +232,16 @@ function displayUpcomming(){
         </div>`;
     });
     container.querySelector(".content-todo").innerHTML = html || "<p>No upcomming tasks</p>";
+
+    // handle the checkbox removal
+    container.querySelector(".content-todo").addEventListener("change", (e) => {
+    if (e.target.classList.contains("round-checkbox") && e.target.checked) {
+        const { id, project } = e.target.dataset;
+        completeTask(project, id);
+        e.target.closest(".todo").remove(); 
+    }
+    });
+
 }
 
 function displaySearch(query){
@@ -229,6 +250,7 @@ function displaySearch(query){
 
     projects.forEach(project => {
         project.todos.forEach(todo => {
+            if (toDo.checklist) return;
             if (todo.title.toLowerCase().includes(query.toLowerCase())) {
                 results.push({ ...todo, projectName: project.title });
             }
@@ -250,6 +272,16 @@ function displaySearch(query){
     });
     container.querySelector(".content-todo").innerHTML = html || "<p>No result found</p>";
 
+    // handle the checkbox removal
+    container.querySelector(".content-todo").addEventListener("change", (e) => {
+    if (e.target.classList.contains("round-checkbox") && e.target.checked) {
+        const { id, project } = e.target.dataset;
+        completeTask(project, id);
+        e.target.closest(".todo").remove(); 
+    }
+    });
+
+
 }
 
 function displayFilter(priority = "all", projectName = "all"){
@@ -259,6 +291,7 @@ function displayFilter(priority = "all", projectName = "all"){
     projects.forEach(project => {
         if (projectName !== "all" && project.title !== projectName) return;
         project.todos.forEach(todo => {
+            if (toDo.checklist) return;
             if (priority !== "all" && todo.priority !== priority) return;
             tasks.push({ ...todo, projectName: project.title });
         });
@@ -280,6 +313,15 @@ function displayFilter(priority = "all", projectName = "all"){
         </div>`;
     });
     container.querySelector(".content-todo").innerHTML = html || "<p>No matching tasks</p>";
+
+    // handle the checkbox removal
+    container.querySelector(".content-todo").addEventListener("change", (e) => {
+    if (e.target.classList.contains("round-checkbox") && e.target.checked) {
+        const { id, project } = e.target.dataset;
+        completeTask(project, id);
+        e.target.closest(".todo").remove(); 
+    });
+
 }
 
 function completeFilter(){
@@ -313,5 +355,14 @@ function setupDialog(dialog, onSubmit) {
   });
 }
 
+function completeTask(projectTitle, todoId){
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    const project = findProject(projectTitle, projects);
+    const todo = project.todos.find(t => t.id === todoId);
+    if (todo) {
+        todo.checklist = true;
+        localStorage.setItem("projects", JSON.stringify(projects));
+    }
+}
 
 export {addTask, displayInbox, displayTodo, addProjectOption, addTaskEvent, displaySearch, displayUpcomming, displayFilter, completeFilter, setupDialog};
